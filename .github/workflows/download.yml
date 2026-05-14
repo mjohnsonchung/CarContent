@@ -1,0 +1,59 @@
+name: Download Car Content
+
+on:
+  schedule:
+    - cron: '0 3 * * *'   # daily at 03:00 UTC
+  workflow_dispatch:        # manual trigger
+
+jobs:
+  download:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install yt-dlp
+        run: pip install -U yt-dlp
+
+      - name: Install rclone
+        run: |
+          curl https://rclone.org/install.sh | sudo bash
+
+      - name: Write rclone config
+        run: |
+          mkdir -p ~/.config/rclone
+          echo "${{ secrets.RCLONE_CONFIG }}" > ~/.config/rclone/rclone.conf
+
+      - name: Fetch creators list from Google Sheet
+        run: |
+          curl -fsSL "${{ secrets.SHEET_CSV_URL }}" -o creators.csv
+          echo "creators.csv downloaded:"
+          wc -l creators.csv
+
+      - name: Run download script
+        run: bash scripts/download.sh
+
+      - name: Upload downloads to Google Drive
+        run: |
+          rclone copy ./downloads/ gdrive:CarContent/Raw/ \
+            --transfers 4 \
+            --progress \
+            --log-level INFO
+
+      - name: Commit updated archive.txt
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add archive.txt
+          if git diff --cached --quiet; then
+            echo "No new entries in archive.txt — nothing to commit."
+          else
+            git commit -m "chore: update yt-dlp archive [skip ci]"
+            git push
+          fi
