@@ -71,6 +71,7 @@ while IFS=',' read -r url theme platform text_overlay notes; do
   # We capture the exit code so one failure doesn't abort the whole run.
   set +e
   yt-dlp \
+    -v \
     $COOKIES_FLAG \
     $EXTRACTOR_ARGS_FLAG \
     --download-archive "$ARCHIVE_FILE" \
