@@ -28,7 +28,7 @@ skipped=0
 failed=0
 
 # ── read CSV, skip header ──────────────────────────────────────────────────────
-while IFS=',' read -r url theme platform notes; do
+while IFS=',' read -r url theme platform text_overlay notes; do
 
   # skip the header row
   if [[ "$url" == "url" ]]; then
