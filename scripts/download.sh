@@ -58,13 +58,24 @@ while IFS=',' read -r url theme platform text_overlay notes; do
   output_dir="${DOWNLOADS_DIR}/${theme}"
   mkdir -p "$output_dir"
 
+  COOKIES_FLAG=""
+  EXTRACTOR_ARGS_FLAG=""
+  MAX_DL=$MAX_DOWNLOADS
+  if [[ "$platform" == "instagram" ]]; then
+    COOKIES_FLAG="--cookies /tmp/ig_cookies.txt"
+    EXTRACTOR_ARGS_FLAG="--extractor-args instagram:include_stories=False"
+    MAX_DL=2
+  fi
+
   # yt-dlp exits non-zero for many soft errors (geo-block, private video, etc.)
   # We capture the exit code so one failure doesn't abort the whole run.
   set +e
   yt-dlp \
+    $COOKIES_FLAG \
+    $EXTRACTOR_ARGS_FLAG \
     --download-archive "$ARCHIVE_FILE" \
     --write-info-json \
-    --max-downloads "$MAX_DOWNLOADS" \
+    --max-downloads "$MAX_DL" \
     --match-filter "duration < ${MAX_DURATION} & duration > ${MIN_DURATION}" \
     --output "${output_dir}/%(uploader)s_%(id)s.%(ext)s" \
     --no-playlist \

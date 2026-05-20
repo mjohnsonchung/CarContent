@@ -21,6 +21,7 @@
 - [x] Updated `creators.csv` schema: added `text_overlay` (TRUE/FALSE) column between `platform` and `notes`
 - [x] Switched rclone config secret to base64-encoded (`RCLONE_CONFIG_B64`) with decode + verification step in workflow
 - [x] Added "Write Instagram cookies" workflow step — decodes `IG_COOKIES_B64` secret to `/tmp/ig_cookies.txt`
+- [x] Instagram-specific yt-dlp flags: cookies, `include_stories=False`, and max-downloads capped at 2 (vs 3 for other platforms)
 
 ---
 
@@ -51,7 +52,7 @@ CarContent/
 
 ## Notes
 
-- `--max-downloads 3` and `duration < 90s` filters keep storage and runtime lean
+- `--max-downloads 3` (2 for Instagram) and `duration < 90s` filters keep storage and runtime lean
 - yt-dlp failures are non-fatal — script logs a warning and moves to the next URL
 - `archive.txt` is committed with `[skip ci]` to avoid re-triggering the workflow
 - Downloads are organised into subfolders by `theme` column on both local and Drive
