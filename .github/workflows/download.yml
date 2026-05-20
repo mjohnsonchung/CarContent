@@ -26,9 +26,15 @@ jobs:
           curl https://rclone.org/install.sh | sudo bash
 
       - name: Write rclone config
+        env:
+          RCLONE_CONFIG_B64: ${{ secrets.RCLONE_CONFIG_B64 }}
         run: |
           mkdir -p ~/.config/rclone
-          echo "${{ secrets.RCLONE_CONFIG }}" > ~/.config/rclone/rclone.conf
+          echo "$RCLONE_CONFIG_B64" | base64 -d > ~/.config/rclone/rclone.conf
+          echo "Config written. Verifying:"
+          head -1 ~/.config/rclone/rclone.conf
+          wc -l ~/.config/rclone/rclone.conf
+          rclone listremotes
 
       - name: Fetch creators list from Google Sheet
         run: |
