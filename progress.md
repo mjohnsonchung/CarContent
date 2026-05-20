@@ -5,7 +5,7 @@
 
 ---
 
-## Status: In Setup
+## Status: In Setup — rclone config fix applied
 
 ---
 
@@ -19,11 +19,13 @@
 - [x] `README.md` — setup guide (secrets, rclone, Google Sheet, testing)
 - [x] Secrets added to GitHub repo (`RCLONE_CONFIG`, `SHEET_CSV_URL`)
 - [x] Updated `creators.csv` schema: added `text_overlay` (TRUE/FALSE) column between `platform` and `notes`
+- [x] Switched rclone config secret to base64-encoded (`RCLONE_CONFIG_B64`) with decode + verification step in workflow
 
 ---
 
 ## To Do
 
+- [ ] Add `RCLONE_CONFIG_B64` secret to GitHub repo (base64-encode your rclone.conf)
 - [ ] Set repo workflow permissions to **Read and write** (Settings → Actions → General)
 - [ ] Test first manual workflow run (Actions tab → Run workflow)
 - [ ] Verify rclone uploads appear in Google Drive under `CarContent/Raw/`
