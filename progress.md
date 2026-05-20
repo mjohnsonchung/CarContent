@@ -20,12 +20,14 @@
 - [x] Secrets added to GitHub repo (`RCLONE_CONFIG`, `SHEET_CSV_URL`)
 - [x] Updated `creators.csv` schema: added `text_overlay` (TRUE/FALSE) column between `platform` and `notes`
 - [x] Switched rclone config secret to base64-encoded (`RCLONE_CONFIG_B64`) with decode + verification step in workflow
+- [x] Added "Write Instagram cookies" workflow step — decodes `IG_COOKIES_B64` secret to `/tmp/ig_cookies.txt`
 
 ---
 
 ## To Do
 
 - [ ] Add `RCLONE_CONFIG_B64` secret to GitHub repo (base64-encode your rclone.conf)
+- [ ] Add `IG_COOKIES_B64` secret to GitHub repo (base64-encode your Instagram cookies file)
 - [ ] Set repo workflow permissions to **Read and write** (Settings → Actions → General)
 - [ ] Test first manual workflow run (Actions tab → Run workflow)
 - [ ] Verify rclone uploads appear in Google Drive under `CarContent/Raw/`

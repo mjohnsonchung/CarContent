@@ -36,6 +36,15 @@ jobs:
           wc -l ~/.config/rclone/rclone.conf
           rclone listremotes
 
+      - name: Write Instagram cookies
+        env:
+          IG_COOKIES_B64: ${{ secrets.IG_COOKIES_B64 }}
+        run: |
+          echo "$IG_COOKIES_B64" | base64 -d > /tmp/ig_cookies.txt
+          echo "Cookies written:"
+          wc -l /tmp/ig_cookies.txt
+          head -3 /tmp/ig_cookies.txt
+
       - name: Fetch creators list from Google Sheet
         run: |
           curl -fsSL "${{ secrets.SHEET_CSV_URL }}" -o creators.csv
